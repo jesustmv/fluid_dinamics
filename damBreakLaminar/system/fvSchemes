@@ -24,6 +24,9 @@ gradSchemes
     default         Gauss linear;
 }
 
+
+//laminar
+/*
 divSchemes
 {
     div(phi,alpha)  Gauss interfaceCompression vanLeer 1;
@@ -32,6 +35,17 @@ divSchemes
 
     div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear;
 }
+*/
+//turbulento
+divSchemes
+{
+    div(phi,alpha)          Gauss interfaceCompression vanLeer 1;
+    div(rhoPhi,U)           Gauss linearUpwind grad(U);
+    div(phi,k)              Gauss upwind;                // ← add this
+    div(phi,epsilon)        Gauss upwind;                // ← add this
+    div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear;
+}
+
 
 laplacianSchemes
 {
