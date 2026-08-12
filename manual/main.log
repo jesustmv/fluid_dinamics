@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.7.16)  28 JUL 2026 16:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.7.16)  28 JUL 2026 16:35
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**corr1.tex
-(./corr1.tex
+**main.tex
+(./main.tex
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
 (/usr/share/texmf-dist/tex/latex/base/article.cls
@@ -23,7 +23,11 @@ File: size12.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
 \abovecaptionskip=\skip49
 \belowcaptionskip=\skip50
 \bibindent=\dimen148
-) (/usr/share/texmf-dist/tex/latex/graphics/graphicx.sty
+) (/usr/share/texmf-dist/tex/latex/subfiles/subfiles.sty
+Package: subfiles 2020/11/14 v2.2 Multi-file projects (package)
+ (/usr/share/texmf-dist/tex/latex/import/import.sty
+Package: import 2020/04/01  v 6.2
+)) (/usr/share/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2024/12/31 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
  (/usr/share/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
@@ -44,8 +48,8 @@ File: pdftex.def 2025/09/29 v1.2d Graphics/color driver for pdftex
 ) (/usr/share/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count283
-) (./corr1.aux)
-\openout1 = `corr1.aux'.
+) (./main.aux)
+\openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
 LaTeX Font Info:    ... okay on input line 11.
@@ -84,10 +88,11 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 12.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 12.
-<imagenes/tree-dambreak.png, id=1, 461.725pt x 435.6275pt>
-File: imagenes/tree-dambreak.png Graphic file (type png)
-<use imagenes/tree-dambreak.png>
-Package pdftex.def Info: imagenes/tree-dambreak.png  used on input line 31.
+ (././corr1.tex
+<./imagenes/tree-dambreak.png, id=1, 461.725pt x 435.6275pt>
+File: ./imagenes/tree-dambreak.png Graphic file (type png)
+<use ./imagenes/tree-dambreak.png>
+Package pdftex.def Info: ./imagenes/tree-dambreak.png  used on input line 31.
 (pdftex.def)             Requested size: 195.0pt x 183.97931pt.
 
 
@@ -106,10 +111,10 @@ Overfull \hbox (2.95125pt too wide) in paragraph at lines 48--49
 []\OT1/cmtt/m/n/12 type symmetryPlane\OT1/cmr/m/n/12 : replica lo que ocurre en el plano de simetr^^S^^Pa. 
  []
 
-<imagenes/modelo_3d.png, id=15, 1849.91125pt x 1036.87375pt>
-File: imagenes/modelo_3d.png Graphic file (type png)
-<use imagenes/modelo_3d.png>
-Package pdftex.def Info: imagenes/modelo_3d.png  used on input line 64.
+<./imagenes/modelo_3d.png, id=15, 1849.91125pt x 1036.87375pt>
+File: ./imagenes/modelo_3d.png Graphic file (type png)
+<use ./imagenes/modelo_3d.png>
+Package pdftex.def Info: ./imagenes/modelo_3d.png  used on input line 64.
 (pdftex.def)             Requested size: 350.99762pt x 196.72327pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -124,48 +129,48 @@ Overfull \hbox (30.18767pt too wide) in paragraph at lines 91--92
 \OT1/cmr/m/n/12 Para flujo tur-bu-lento, debe-mos mod-i-ficar el archivo \OT1/cmtt/m/n/12 constant/momentumTransport
  []
 
-<imagenes/ras_file.png, id=24, 245.91875pt x 219.82124pt>
-File: imagenes/ras_file.png Graphic file (type png)
-<use imagenes/ras_file.png>
-Package pdftex.def Info: imagenes/ras_file.png  used on input line 95.
+<./imagenes/ras_file.png, id=24, 245.91875pt x 219.82124pt>
+File: ./imagenes/ras_file.png Graphic file (type png)
+<use ./imagenes/ras_file.png>
+Package pdftex.def Info: ./imagenes/ras_file.png  used on input line 95.
 (pdftex.def)             Requested size: 117.00119pt x 104.58388pt.
 [4 <./imagenes/ras_file.png>]
-<imagenes/funciones.png, id=29, 205.76875pt x 260.975pt>
-File: imagenes/funciones.png Graphic file (type png)
-<use imagenes/funciones.png>
-Package pdftex.def Info: imagenes/funciones.png  used on input line 117.
+<./imagenes/funciones.png, id=29, 205.76875pt x 260.975pt>
+File: ./imagenes/funciones.png Graphic file (type png)
+<use ./imagenes/funciones.png>
+Package pdftex.def Info: ./imagenes/funciones.png  used on input line 117.
 (pdftex.def)             Requested size: 155.99762pt x 197.84927pt.
-<imagenes/probes_function.png, id=30, 350.30875pt x 377.41pt>
-File: imagenes/probes_function.png Graphic file (type png)
-<use imagenes/probes_function.png>
-Package pdftex.def Info: imagenes/probes_function.png  used on input line 125.
+<./imagenes/probes_function.png, id=30, 350.30875pt x 377.41pt>
+File: ./imagenes/probes_function.png Graphic file (type png)
+<use ./imagenes/probes_function.png>
+Package pdftex.def Info: ./imagenes/probes_function.png  used on input line 125.
 (pdftex.def)             Requested size: 155.99762pt x 168.07072pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [5 <./imagenes/funciones.png>]
-<imagenes/fluido_mov1.png, id=35, 863.225pt x 285.065pt>
-File: imagenes/fluido_mov1.png Graphic file (type png)
-<use imagenes/fluido_mov1.png>
-Package pdftex.def Info: imagenes/fluido_mov1.png  used on input line 143.
+<./imagenes/fluido_mov1.png, id=35, 863.225pt x 285.065pt>
+File: ./imagenes/fluido_mov1.png Graphic file (type png)
+<use ./imagenes/fluido_mov1.png>
+Package pdftex.def Info: ./imagenes/fluido_mov1.png  used on input line 143.
 (pdftex.def)             Requested size: 234.00238pt x 77.27306pt.
- [6 <./imagenes/probes_function.png> <./imagenes/fluido_mov1.png>] (./corr1.aux)
+) (./incompressibleFluid/incompressibleFluid.tex) [6 <./imagenes/probes_function.png> <./imagenes/fluido_mov1.png>] (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 1375 strings out of 469515
- 22546 string characters out of 5470807
+ 1491 strings out of 469515
+ 25059 string characters out of 5470807
  439756 words of memory out of 5000000
- 30062 multiletter control sequences out of 15000+600000
+ 30153 multiletter control sequences out of 15000+600000
  633742 words of font info for 60 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 57i,6n,65p,553b,255s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,6n,65p,574b,325s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on corr1.pdf (6 pages, 278676 bytes).
+Output written on main.pdf (6 pages, 278722 bytes).
 PDF statistics:
  72 PDF objects out of 1000 (max. 8388607)
  37 compressed objects within 1 object stream
