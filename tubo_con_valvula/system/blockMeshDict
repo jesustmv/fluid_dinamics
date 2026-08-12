@@ -1,0 +1,172 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 1;
+
+vertices
+(
+    // primer cubo
+    (0 0 0)                         //0
+    (3.5 0 0)                       //1
+    (3.5 1 0)                       //2
+    (0 1 0)                         //3
+    (0 0 1)                         //4
+    (3.5 0 1)                       //5
+    (3.5 1 1)                       //6
+    (0 1 1)                         //7
+
+    // primera parte valvula
+    (4.2071 0.2928 0)               //8
+    (4.2071 0 0)                    //9
+    (4.2071 0.2928 1)               //10
+    (4.2071 0 1)                    //11
+
+    // parte trasera de la valvula
+    (4.3071 0.3928 0)               //12
+    (4.3071 0 0)                    //13
+    (4.3071 0.3928 1)               //14
+    (4.3071 0 1)                    //15
+
+    // triangulo
+    (3.6 1 0)                       //16
+    (4.3071 1 0)                    //17
+    (3.6 1 1)                       //18
+    (4.3071 1 1)                    //19
+
+    // final valvula
+    (13.5 0 0)                      //20
+    (13.5 1 0)                      //21
+    (13.5 0 1)                      //22
+    (13.5 1 1)                      //23
+    (13.5 0.3928 0)                 //24
+    (13.5 0.3928 1)                 //25
+
+    // new vertices – midpoints of the triangle's horizontal edge
+    //lo obtienes sumando 4+3 y dividiendolo entre 2
+    (3.95355 1 0)                   //26
+    (3.95355 1 1)                   //27
+);
+
+blocks
+(
+    // cubo entrada
+    hex (0 1 2 3 4 5 6 7)
+    (125 200 1)
+    simpleGrading (1 1 1)
+
+    // primera parte valvula
+    hex (1 9 8 2 5 11 10 6)
+    (26 200 1)
+    simpleGrading (1 1 1)
+
+    // parte trasera valvula
+    hex (9 13 12 8 11 15 14 10)
+    (6 200 1)
+    simpleGrading (1 1 1)
+
+    // triangulo – left wedge
+    hex (12 26 16 16 14 27 18 18)
+    (10 4 1)                // 100 cells along 12-26, 100 along 26-16
+    simpleGrading (1 1 1)
+
+    // triangulo – right wedge
+    hex (12 17 26 26 14 19 27 27)
+    (50 10 1)                // 200 cells along 12-17, 100 along 17-26
+    simpleGrading (1 1 1)
+
+    // cubo salida abajo
+    hex (13 20 24 12 15 22 25 14)
+    (327 200 1)
+    simpleGrading (1 1 1)
+
+    // cubo salida arriba
+    hex (12 24 21 17 14 25 23 19)
+    (327 50 1)
+    simpleGrading (1 1 1)
+);
+
+defaultPatch
+{
+    type empty;
+}
+
+
+boundary
+(
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (0 4 7 3)
+        );
+    }
+
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (24 21 23 25)
+            (24 25 22 20)
+        );
+    }
+
+    down
+    {
+        type symmetryPlane;
+        faces
+        (
+            (0 1 5 4)
+            (1 9 11 5)
+            (9 13 15 11)
+            (13 20 22 15)
+        );
+    }
+
+    up
+    {
+        type wall;
+        faces
+        (
+            (3 2 6 7)
+            (2 8 10 6)
+            (8 12 14 10)
+            (12 16 18 14)
+            (16 26 27 18)
+            (26 17 19 27)
+            (17 21 23 19)
+        );
+    }
+    vacio
+    {
+    type empty;
+        faces
+        (
+        (0 1 2 3)
+        (1 9 8 2)
+        (9 13 12 8)
+        (13 20 24 12)
+        (12 24 21 17)
+        (4 5 6 7)
+        (5 11 10 6)
+        (11 15 14 10)
+        (15 22 25 14)
+        (14 25 23 19)   // block7 back
+        );
+    }
+);
+
+// ************************************************************************* //
