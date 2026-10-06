@@ -1,0 +1,123 @@
+\section{Solucionadores (solvers)}
+
+En esta sección veremos cuatro solvers para flujo laminar, turbulento y LES (definido para un número grande de remolinos) y otro de dos estados. Nos enfocaremos en los tres solvers incompresibles fundamentales: \texttt{icoFoam}, \texttt{simpleFoam} y \texttt{pimpleFoam}.
+
+\subsection{icoFoam}
+
+Este solver es para fluidos incompresibles y laminares. Las ecuaciones que resuelve son:
+\[
+\nabla \cdot \mathbf{u} = 0
+\]
+\[
+\frac{\partial \mathbf{u}}{\partial t} + \nabla \cdot (\mathbf{u} \otimes \mathbf{u}) - \nabla \cdot (\nu \nabla \mathbf{u}) = -\nabla p
+\]
+donde $\mathbf{u}$ es el campo de velocidad, $\nu$ es la viscosidad cinemática y $p$ es la presión cinemática (presión estática dividida por la densidad). Nótese que en \texttt{icoFoam} no se especifica la densidad, ya que se trabaja directamente con la presión cinemática.
+
+El algoritmo de acoplamiento presión--velocidad que utiliza es PISO (\textit{Pressure-Implicit with Splitting of Operators}), diseñado específicamente para simulaciones transitorias. El número de Courant debe mantenerse estrictamente por debajo de 1 para garantizar estabilidad y precisión temporal.
+
+\subsubsection*{Preparación del caso}
+
+Para poder usarlo vamos a copiar un tutorial. En la terminal escribiremos lo siguiente:
+\begin{verbatim}
+    cd $FOAM_RUN
+    cp -r $FOAM_TUTORIALS/incompressible/icoFoam/cavity/cavity .
+    cd cavity
+\end{verbatim}
+
+Ahora veamos qué tenemos dentro de la carpeta. Primero podemos abrir la carpeta \texttt{system}, en la cual encontraremos el archivo \texttt{blockMeshDict}, donde podemos colocar el mallado. Es importante que en la parte de \texttt{boundary} tengamos claros los nombres, ya que los seguiremos usando en el solver.
+
+\subsubsection*{Condiciones de contorno}
+
+Dentro de la carpeta \texttt{0} tenemos dos archivos: \texttt{U} y \texttt{p}. Como podemos ver dentro del archivo, podemos encontrar lo siguiente:
+\begin{verbatim}
+boundaryField
+{
+  movingWall
+  {
+    type    zeroGradient;
+  }
+
+  frontAndBack
+  {
+    type    empty;
+  }
+}
+\end{verbatim}
+Aquí es donde pondremos los nombres que escogimos en \texttt{boundary} y escogeremos alguno de los siguientes tipos para las agrupaciones de las caras.
+\begin{itemize}
+  \item \texttt{zeroGradient}: el gradiente normal de la variable en la frontera es cero. Se usa típicamente para la presión en paredes y para la velocidad en salidas donde el flujo está completamente desarrollado.
+  \item \texttt{symmetryPlane}: impone simetría especular respecto al plano de la frontera. Se usa cuando el dominio físico puede reducirse a la mitad o a un cuarto aprovechando simetrías.
+  \item \texttt{empty}: indica a OpenFOAM que la dirección normal a esa frontera no se resuelve. Se usa para simular casos 2D, donde la tercera dirección tiene solo una celda.
+  \item \texttt{fixedValue}: impone un valor fijo de la variable en la frontera. Es la condición típica para una entrada (\textit{inlet}) con velocidad conocida o para una pared móvil.
+  \item \texttt{noSlip}: condición de no deslizamiento para la velocidad en paredes sólidas estacionarias. Es equivalente a \texttt{fixedValue} con valor $(0\,0\,0)$.
+\end{itemize}
+
+\subsubsection*{Dimensiones y campo interno}
+
+Ahora notemos que en la parte de hasta arriba podemos encontrar lo siguiente:
+\begin{verbatim}
+dimensions      [0 2 -2 0 0 0 0];
+\end{verbatim}
+Aquí definimos las dimensiones del campo; en este caso, la presión cinemática tiene unidades de $m^{2}\,s^{-2}$. El vector de dimensiones sigue el orden: masa, longitud, tiempo, temperatura, cantidad de sustancia, corriente eléctrica e intensidad luminosa.
+
+Debajo de este podemos ver:
+\begin{verbatim}
+internalField   uniform 0;
+\end{verbatim}
+Esto quiere decir que los datos del campo interno pueden ser uniformes y descritos por un solo valor, o podemos usar \texttt{nonuniform}, donde todos los valores del campo deben ser especificados uno por uno.
+
+\subsubsection*{Parámetros del algoritmo PISO}
+
+En el archivo \texttt{system/fvSolution} se controlan los parámetros del algoritmo PISO:
+\begin{verbatim}
+PISO
+{
+    nCorrectors             2;
+    nNonOrthogonalCorrectors 0;
+    pRefCell                0;
+    pRefValue               0;
+}
+\end{verbatim}
+\begin{itemize}
+  \item \texttt{nCorrectors}: número de pasos correctores de presión por paso de tiempo. Típicamente 2 es suficiente para flujo laminar.
+  \item \texttt{nNonOrthogonalCorrectors}: correcciones adicionales para mallas no ortogonales. En el tutorial de la cavidad es 0 porque la malla es perfectamente ortogonal; para mallas generadas con \texttt{snappyHexMesh} suele incrementarse a 1 o 2.
+  \item \texttt{pRefCell} y \texttt{pRefValue}: fijan el nivel de presión de referencia en la celda indicada. En dominios cerrados (como la cavidad), la presión solo está definida salvo una constante; estos parámetros eliminan esa indeterminación.
+\end{itemize}
+
+\subsection{simpleFoam}
+
+\texttt{simpleFoam} es un solver estacionario para flujo incompresible y turbulento. Utiliza el algoritmo SIMPLE (\textit{Semi-Implicit Method for Pressure-Linked Equations}), que es iterativo: cada iteración exterior consiste en un predictor de momento, una solución de presión y una corrección de velocidad.
+
+A diferencia de \texttt{icoFoam}, \texttt{simpleFoam} sí soporta modelos de turbulencia RANS y requiere sub-relajación para estabilizar la iteración. Los factores típicos son 0.7 para velocidad y turbulencia, y 0.3 para presión.
+
+El tutorial canónico es \texttt{pitzDaily}, que simula flujo turbulento sobre un escalón (\textit{backward-facing step}) con el modelo $k$-$\epsilon$ estándar. Se ejecuta con:
+\begin{verbatim}
+    cp -r $FOAM_TUTORIALS/incompressible/simpleFoam/pitzDaily .
+    cd pitzDaily
+    blockMesh
+    simpleFoam
+\end{verbatim}
+
+La convergencia se controla mediante \texttt{residualControl} en \texttt{fvSolution}, donde se especifican las tolerancias para los residuos de $p$, $\mathbf{U}$ y las variables de turbulencia.
+
+\subsection{pimpleFoam}
+
+\texttt{pimpleFoam} es un solver transitorio para flujo incompresible y turbulento, y soporta malla móvil. Utiliza el algoritmo PIMPLE, que combina la estructura de bucle exterior de SIMPLE con los correctores internos de PISO. Esto permite usar pasos de tiempo más grandes (números de Courant de 1 a 10 o más) manteniendo la estabilidad.
+
+Los parámetros clave en \texttt{fvSolution} son:
+\begin{verbatim}
+PIMPLE
+{
+    momentumPredictor       yes;
+    nOuterCorrectors        1;
+    nCorrectors             3;
+    nNonOrthogonalCorrectors 0;
+}
+\end{verbatim}
+\begin{itemize}
+  \item \texttt{nOuterCorrectors}: número de bucles exteriores por paso de tiempo. Con 1 se comporta como PISO; con valores mayores mejora la convergencia con pasos de tiempo grandes.
+  \item \texttt{nCorrectors}: número de correcciones de presión dentro de cada bucle exterior.
+  \item \texttt{momentumPredictor}: activa o desactiva la solución del predictor de momento. Para flujos de bajo Reynolds o multifásicos conviene desactivarlo.
+\end{itemize}
+
+El tutorial \texttt{periodicHill} es un ejemplo típico: parte de una solución estacionaria de \texttt{simpleFoam} y luego continúa con \texttt{pimpleFoam} para una simulación LES. Este flujo de trabajo (estacionario $\to$ transitorio) es una práctica común para reducir el periodo de arranque.

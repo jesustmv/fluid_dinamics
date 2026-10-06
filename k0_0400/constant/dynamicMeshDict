@@ -1,0 +1,102 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      dynamicMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dynamicFvMesh       dynamicOversetFvMesh;
+motionSolverLibs    (rigidBodyMeshMotion);
+solver              rigidBodyMotion;
+
+patches             (plate);
+rho                 rhoInf;
+rhoInf              1.0;
+
+#include "./system/GeometricParameters"
+mOfRB 1.0;
+cOfMx #eval "0.5*($xc1 + $xc2)";
+cOfMy #eval "0.5*($yc1 + $yc2)";
+cOfMz #eval "0.5*($zmax + $zmin)";
+Ixx #eval "($mOfRB/12)*(sqr($beta) + sqr($zmax - $zmin))";
+Ixy 0.0;
+Ixz 0.0;
+Iyy #eval "($mOfRB/12)*(sqr($ell) + sqr($zmax - $zmin))";
+Iyz 0.0;
+Izz #eval "($mOfRB/12)*(sqr($ell) + sqr($beta))";
+// Spring reference orientation
+angle #eval "$pi - $theta";
+rMxx #eval "cos($angle)";
+rMxy #eval "-sin($angle)";
+rMxz 0.0;
+rMyx #eval "sin($angle)";
+rMyy #eval "cos($angle)";
+rMyz 0.0;
+rMzx 0.0;
+rMzy 0.0;
+rMzz 1.0;
+
+rigidBodyMotionCoeffs
+{
+    rho                 rhoInf;
+    rhoInf              1.0;
+    innerDistance       1000; // Large arbitrary number to move the whole cellZone rigidly
+    outerDistance       1001;
+
+    solver
+    {
+        type            symplectic; // Time-integrator scheme (Newmark, CrankNicolson, symplectic)
+    }
+    
+    accelerationRelaxation   0.7;
+    report                   on; // (X Y Z) Center of gravity
+    //CofG                     (0.0 -1.0 0.0);     // Reference origin
+
+    bodies
+    {
+        leaflet
+        {
+            type            rigidBody;
+            parent          root;
+            patches         (plate); // Name of your rigid-body boundary
+            mass            $mOfRB; // Mass of the rigid-body
+            centreOfMass    ($cOfMx $cOfMy $cOfMz); // Centre of mass of the rigid-body
+            inertia         ($Ixx $Ixy $Ixz $Iyy $Iyz $Izz); // Inertia tensor about the centre of mass
+            transform       (1 0 0 0 1 0 0 0 1) (0.0 -1.0 0.0);
+            innerDistance   1000; // Large arbitrary number to move the whole cellZone rigidly
+            outerDistance   1001;
+            //cofg            (0.5 0.0 0.0); // CoG relative to its own hinge
+            joint
+            {
+                type            Rz; // 1-DoF rotation around Z-axis
+            }
+
+        }
+    }
+
+    restraints
+    {
+        torsionalSpring
+        {
+            type            linearAxialAngularSpring;
+            body            leaflet;
+            referenceOrientation    ($rMxx $rMxy $rMxz $rMyx $rMyy $rMyz $rMzx $rMzy $rMzz);
+            axis            (0.0 0.0 1.0); // Axis of the torsional spring
+//            refAngle        0.0;
+            stiffness       0.04; // Torsional spring constant (N*m/rad)
+            damping         0.0; // Torsional damping coefficient (N*m*s/rad)         
+        }
+    }
+}
+
+
+// ************************************************************************* //

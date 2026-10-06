@@ -1,0 +1,87 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+libs            (overset fvMotionSolvers);
+
+DebugSwitches
+{
+    overset                 0;
+    dynamicOversetFvMesh    0;
+    cellVolumeWeight        0;
+}
+
+functions
+{
+    calculateForces
+    {
+        type            forces;
+        libs            (forces); // Standard library for v2412
+        patches         (plate);  // Name of your patch/patches
+        
+        // Pressure and velocity field names
+        p               p;
+        U               U;
+
+        // Density handling (Crucial!)
+        rho             rhoInf;         // Use rho for compressible/multiphase solvers
+        rhoInf          1.0;            // Reference density (only needed if rho=rhoInf)
+
+        // Centre of rotation for moments
+        CofR            (0.0 -1.0 0.0);          
+
+        // Write control settings
+        writeControl    timeStep;
+        writeInterval   1;
+        log             true;             // Prints summary to screen/log file
+    }
+}
+
+application     overPimpleDyMFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         50;
+
+deltaT          5e-6;
+
+writeControl    timeStep;
+
+writeInterval   50;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable true;
+
+adjustTimeStep  true;
+
+maxCo          1;
+
+
+// ************************************************************************* //

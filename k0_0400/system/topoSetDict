@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2412                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+    // Select the background grid which are connected to the indicated point
+    {
+        name    BgGrid; // Background Grid
+        type    cellSet;
+        action  new;
+        source  regionsToCell;
+        insidePoints
+        (
+            (-3.9 -0.1 0.0)
+        );
+    }
+    // Create the overset grid by copying the background grid
+    {
+        name    OsGrid; // Overset Grid
+        type    cellSet;
+        action  new;
+        source  cellToCell;
+        set     BgGrid;
+    }
+    // Invert action specifies that all cells not belonging to BgGrid are included in OsGrid
+    {
+        name    OsGrid;
+        type    cellSet;
+        action  invert;
+    }
+);
+
+
+// ************************************************************************* //

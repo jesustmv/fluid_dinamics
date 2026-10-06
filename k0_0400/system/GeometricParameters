@@ -1,0 +1,82 @@
+xmin -4.0;
+x0 0.0;
+xmax 6.0;
+ymin -1.0;
+ymax 0.0;
+zmin -0.05;
+zmax 0.05;
+
+pi 3.1416;
+ell #eval "1.50*($ymax - $ymin)";
+beta #eval "0.10/($ymax - $ymin)";
+thmin #eval "acos((1.0 - 0.5*$beta)/($ell - 0.5*$beta))";
+thmax #eval "$pi/2";
+theta #eval "0.75*$thmin + 0.25*$thmax";
+s #eval "2*$beta";
+
+sGx2 2.0;
+sGx1 #eval "1.0/$sGx2";
+deltay 0.025;
+deltax #eval "(($sGx2 + 1.0)/2.0)*$deltay";
+deltal $deltay;
+deltar $deltay;
+deltaz #eval "$zmax - $zmin";
+
+xcells1 #eval "ceil(($x0 - $xmin)/$deltax)";
+xcells2 #eval "ceil(($xmax - $x0)/$deltax)";
+ycells #eval "ceil(($ymax - $ymin)/$deltay)";
+zcells #eval "ceil(($zmax - $zmin)/$deltaz)";
+lcells #eval "ceil(($ell - $beta)/$deltal)";
+rcells #eval "ceil($s/$deltar)";
+thcells #eval "ceil((0.5*$pi*((0.5*$beta)+$s))/$deltar)";
+
+// Link central line
+xc1 $x0;
+yc1 #eval "$ymin";
+xc2 #eval "$xc1 + ($ell - 0.5*$beta)*sin($theta)";
+yc2 #eval "$yc1 + ($ell - 0.5*$beta)*cos($theta)";
+// Link border
+xb0 #eval "$xc1 - 0.5*$beta*sin($theta)";
+yb0 #eval "$yc1 - 0.5*$beta*cos($theta)";
+xb1 #eval "$xc1 - 0.5*$beta*cos($theta)";
+yb1 #eval "$yc1 + 0.5*$beta*sin($theta)";
+xb2 #eval "$xc2 - 0.5*$beta*cos($theta)";
+yb2 #eval "$yc2 + 0.5*$beta*sin($theta)";
+xb3 #eval "$xc2 + 0.5*$beta*sin($theta)";
+yb3 #eval "$yc2 + 0.5*$beta*cos($theta)";
+xb4 #eval "$xc2 + 0.5*$beta*cos($theta)";
+yb4 #eval "$yc2 - 0.5*$beta*sin($theta)";
+xb5 #eval "$xc1 + 0.5*$beta*cos($theta)";
+yb5 #eval "$yc1 - 0.5*$beta*sin($theta)";
+
+// Overset boundary
+xo0 #eval "$xb0 - $s*sin($theta)";
+yo0 #eval "$yb0 - $s*cos($theta)";
+xo1 #eval "$xb1 - $s*cos($theta)";
+yo1 #eval "$yb1 + $s*sin($theta)";
+xo2 #eval "$xb2 - $s*cos($theta)";
+yo2 #eval "$yb2 + $s*sin($theta)";
+xo3 #eval "$xb3 + $s*sin($theta)";
+yo3 #eval "$yb3 + $s*cos($theta)";
+xo4 #eval "$xb4 + $s*cos($theta)";
+yo4 #eval "$yb4 - $s*sin($theta)";
+xo5 #eval "$xb5 + $s*cos($theta)";
+yo5 #eval "$yb5 - $s*sin($theta)";
+
+// Interpolation points
+xib0 #eval "$xc1 + ($xb1 - $xc1)*cos($pi/4) - ($yb1 - $yc1)*sin($pi/4)";
+yib0 #eval "$yc1 + ($xb1 - $xc1)*sin($pi/4) + ($yb1 - $yc1)*cos($pi/4)";
+xib1 #eval "$xc2 + ($xb3 - $xc2)*cos($pi/4) - ($yb3 - $yc2)*sin($pi/4)";
+yib1 #eval "$yc2 + ($xb3 - $xc2)*sin($pi/4) + ($yb3 - $yc2)*cos($pi/4)";
+xib2 #eval "$xc2 + ($xb4 - $xc2)*cos($pi/4) - ($yb4 - $yc2)*sin($pi/4)";
+yib2 #eval "$yc2 + ($xb4 - $xc2)*sin($pi/4) + ($yb4 - $yc2)*cos($pi/4)";
+xib3 #eval "$xc1 + ($xb0 - $xc1)*cos($pi/4) - ($yb0 - $yc1)*sin($pi/4)";
+yib3 #eval "$yc1 + ($xb0 - $xc1)*sin($pi/4) + ($yb0 - $yc1)*cos($pi/4)";
+xio0 #eval "$xc1 + ($xo1 - $xc1)*cos($pi/4) - ($yo1 - $yc1)*sin($pi/4)";
+yio0 #eval "$yc1 + ($xo1 - $xc1)*sin($pi/4) + ($yo1 - $yc1)*cos($pi/4)";
+xio1 #eval "$xc2 + ($xo3 - $xc2)*cos($pi/4) - ($yo3 - $yc2)*sin($pi/4)";
+yio1 #eval "$yc2 + ($xo3 - $xc2)*sin($pi/4) + ($yo3 - $yc2)*cos($pi/4)";
+xio2 #eval "$xc2 + ($xo4 - $xc2)*cos($pi/4) - ($yo4 - $yc2)*sin($pi/4)";
+yio2 #eval "$yc2 + ($xo4 - $xc2)*sin($pi/4) + ($yo4 - $yc2)*cos($pi/4)";
+xio3 #eval "$xc1 + ($xo0 - $xc1)*cos($pi/4) - ($yo0 - $yc1)*sin($pi/4)";
+yio3 #eval "$yc1 + ($xo0 - $xc1)*sin($pi/4) + ($yo0 - $yc1)*cos($pi/4)";

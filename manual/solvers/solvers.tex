@@ -1,0 +1,59 @@
+\section{Solucionadores(solvers)}
+
+En esta seccion veremos 4 solvers para flujo laminar, turbulento, les que esta definido para un numero grande de eddy y otro de dos estados 
+
+\subsection{icoFoam}
+Este solver es para fluidos incompresible y laminar, las ecuaciones son
+\[
+\nabla\cdot u = 0 
+\]
+\[
+\frac{\partial}{\partial t}(u)+\nabla\cdot (u \otimes u)- \nabla\cdot(\nu\nabla u)=-\nabla p
+\]
+Ahora para poderlo usar vamos a copiar el un tutorial por lo que en la terminal escribiremos lo siguiente
+\begin{verbatim}
+    cd $FOAM_RUN
+    cp -r $FOAM_TUTORIALS/incompressible/icoFoam/cavity/cavity .
+    cd cavity
+\end{verbatim}
+
+Ahora veamos que tenemos dentro de la carpeta
+Primero podemos abrir la carpeta system en la cual encotraremos el archivo $\texttt{blockMeshDict}$ en el cual podemos colocar el mallado. Es importante que en la parte de $\texttt{boundary}$ tengamos claros los nombres ya que los seguiremos usando en el solver
+
+Vamos a a parte del solver dentro de la carpeta 0 tenemos dos archivos uno $\texttt{U}$ y $\texttt{p}$, como podemos ver dentro del archivo podemos ver lo siguiente
+\[
+\begin{verbatim}
+boudaryField
+{
+  movingWall
+  {
+    type    zeroGradient;
+  }
+
+  frontAndBack
+  {
+    type    empty;
+  }
+}
+\end{verbatim}
+
+\]
+
+Aqui es donde pondremos los nombres que escogimos en $\texttt{boundary}$ y escogeremos alguno de los siguientes tipos para las agrupaciones de las caras.
+\begin{itemize}
+  \item zeroGradient:
+  \item symmetryPlane:
+  \item empty:
+  \item fixedValue:
+\end{itemize}
+
+Ahora notemos que en la parte de hasta arriba podemos encontrar lo siguiente
+
+$\texttt{dimensions      [0 2 -2 0 0 0 0];}$
+
+aqui definimos las dimensiones del campo en este caso la presion kinematica $m^{2}s^{-2}$.
+Debajo de este podemos ver
+
+$\texttt{internalField uniform 0;}$
+
+Este quiere decir que el los datos del campo interno puede ser uniforme y descritos por un solo valor o podemos usar $\texttt{nonuniform}$ donde todos los valores del campo deben de ser especificados

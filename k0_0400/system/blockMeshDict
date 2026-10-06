@@ -1,0 +1,213 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2424                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale   1;
+
+// Load parameters
+
+#include "GeometricParameters"
+
+vertices
+(
+    // Background
+    ($xmin $ymin $zmin) // 0
+    ($x0 $ymin $zmin)   // 1
+    ($xmax $ymin $zmin) // 2
+    ($xmin $ymax $zmin) // 3
+    ($x0 $ymax $zmin)   // 4
+    ($xmax $ymax $zmin) // 5
+    ($xmin $ymin $zmax) // 6
+    ($x0 $ymin $zmax)   // 7
+    ($xmax $ymin $zmax) // 8
+    ($xmin $ymax $zmax) // 9
+    ($x0 $ymax $zmax)   // 10
+    ($xmax $ymax $zmax) // 11
+    // Moving zone
+    ($xo5 $yo5 $zmin) // 12
+    ($xo4 $yo4 $zmin) // 13
+    ($xb5 $yb5 $zmin) // 14
+    ($xb4 $yb4 $zmin) // 15
+    ($xo0 $yo0 $zmin) // 16
+    ($xb0 $yb0 $zmin) // 17
+    ($xb3 $yb3 $zmin) // 18
+    ($xo3 $yo3 $zmin) // 19
+    ($xb1 $yb1 $zmin) // 20
+    ($xb2 $yb2 $zmin) // 21
+    ($xo1 $yo1 $zmin) // 22
+    ($xo2 $yo2 $zmin) // 23
+    ($xo5 $yo5 $zmax) // 24
+    ($xo4 $yo4 $zmax) // 25
+    ($xb5 $yb5 $zmax) // 26
+    ($xb4 $yb4 $zmax) // 27
+    ($xo0 $yo0 $zmax) // 28
+    ($xb0 $yb0 $zmax) // 29
+    ($xb3 $yb3 $zmax) // 30
+    ($xo3 $yo3 $zmax) // 31
+    ($xb1 $yb1 $zmax) // 32
+    ($xb2 $yb2 $zmax) // 33
+    ($xo1 $yo1 $zmax) // 34
+    ($xo2 $yo2 $zmax) // 35
+);
+
+blocks
+(
+    // Background
+    hex (0 1 4 3 6 7 10 9) ($xcells1 $ycells $zcells) simpleGrading ($sGx1 1 1)
+    hex (1 2 5 4 7 8 11 10) ($xcells2 $ycells $zcells) simpleGrading ($sGx2 1 1)
+    // Moving zone
+    hex (12 13 15 14 24 25 27 26) movingZone ($lcells $rcells $zcells) simpleGrading (1 1 1)
+    hex (13 19 18 15 25 31 30 27) movingZone ($thcells $rcells $zcells) simpleGrading (1 1 1)
+    hex (18 19 23 21 30 31 35 33) movingZone ($rcells $thcells $zcells) simpleGrading (1 1 1)
+    hex (20 21 23 22 32 33 35 34) movingZone ($lcells $rcells $zcells) simpleGrading (1 1 1)
+    hex (16 17 20 22 28 29 32 34) movingZone ($rcells $thcells $zcells) simpleGrading (1 1 1)
+    hex (16 12 14 17 28 24 26 29) movingZone ($thcells $rcells $zcells) simpleGrading (1 1 1)
+);
+
+edges
+(
+    // Moving zone
+    arc 13 19 ($xio2 $yio2 $zmin)
+    arc 19 23 ($xio1 $yio1 $zmin)
+    arc 22 16 ($xio0 $yio0 $zmin)
+    arc 16 12 ($xio3 $yio3 $zmin)
+    arc 15 18 ($xib2 $yib2 $zmin)
+    arc 18 21 ($xib1 $yib1 $zmin)
+    arc 20 17 ($xib0 $yib0 $zmin)
+    arc 17 14 ($xib3 $yib3 $zmin)
+    arc 25 31 ($xio2 $yio2 $zmax)
+    arc 31 35 ($xio1 $yio1 $zmax)
+    arc 34 28 ($xio0 $yio0 $zmax)
+    arc 28 24 ($xio3 $yio3 $zmax)
+    arc 27 30 ($xib2 $yib2 $zmax)
+    arc 30 33 ($xib1 $yib1 $zmax)
+    arc 32 29 ($xib0 $yib0 $zmax)
+    arc 29 26 ($xib3 $yib3 $zmax)
+);
+
+boundary
+(
+    overset1
+    {
+        type overset;
+        faces
+        (
+            (12 13 25 24)
+            (13 19 31 25)
+            (19 23 35 31)
+            (22 34 35 23)
+            (22 16 28 34)
+            (12 24 28 16)
+        );
+    }
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (0 6 9 3)
+        );
+    }
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (2 5 11 8)
+        );
+    }
+    bottom
+    {
+        type wall;
+        faces
+        (
+            (0 1 7 6)
+            (1 2 8 7)
+        );
+    }
+    top
+    {
+        type symmetryPlane;
+        faces
+        (
+            (3 9 10 4)
+            (4 10 11 5)
+        );
+    }
+    back
+    {
+        type empty;
+        faces
+        (
+            (0 3 4 1)
+            (1 4 5 2)
+        );
+    }
+    front
+    {
+        type empty;
+        faces
+        (
+            (6 7 10 9)
+            (7 8 11 10)
+        );
+    }
+    plate
+    {
+        type wall;
+        faces
+        (
+             (14 15 27 26)
+             (15 18 30 27)
+             (18 21 33 30)
+             (20 32 33 21)
+             (17 29 32 20)
+             (14 26 29 17)
+        );
+    }
+    back1
+    {
+        type empty;
+        faces
+        (
+            (12 14 15 13)
+            (13 15 18 19)
+            (18 21 23 19)
+            (20 22 23 21)
+            (17 16 22 20)
+            (12 16 17 14)
+        );
+    }
+    front1
+    {
+        type empty;
+        faces
+        (
+            (24 25 27 26)
+            (25 31 30 27)
+            (30 31 35 33)
+            (32 33 35 34)
+            (29 32 34 28)
+            (24 26 29 28)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);
+
+
+// ************************************************************************* //
