@@ -76,6 +76,8 @@ INPUT ./solvers/solvers.tex
 INPUT ./solvers/solvers.tex
 INPUT ./solvers/solvers.tex
 INPUT ./solvers/solvers.tex
+INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm
+INPUT /usr/share/texmf-dist/fonts/tfm/public/cm/cmbx6.tfm
 INPUT ./corr1.tex
 INPUT ././corr1.tex
 INPUT ./corr1.tex

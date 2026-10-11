@@ -1,10 +1,12 @@
 # Fdb version 4
-["pdflatex"] 1791249895.16389 "main.tex" "main.pdf" "main" 1791249895.41912 2
+["pdflatex"] 1791748649.94658 "main.tex" "main.pdf" "main" 1791748650.20687 0
   "./corr1.tex" 1790911627.08224 7249 a6f966e3537f91c4e1304441cd11f6b7 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1775415801 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1775415801 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/tfm/jknappen/ec/tcrm1200.tfm" 1775415801 1536 74b7293ec3713bb7fdca8dd1bd1f469c ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1775415801 1324 c910af8c371558dc20f2d7822f66fe64 ""
+  "/usr/share/texmf-dist/fonts/tfm/public/cm/cmbx6.tfm" 1775415801 1344 8a0be4fe4d376203000810ad4dc81558 ""
+  "/usr/share/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm" 1775415801 1332 1fde11373e221473104d6cc5993f046e ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm" 1775415801 1524 4414a8315f39513458b80dfc63bff03a ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1775415801 1512 f21f83efb36853c0b70002322c1ab3ad ""
   "/usr/share/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm" 1775415801 1520 eccf95517727cb11801f4f1aee3a21b4 ""
@@ -53,11 +55,11 @@
   "imagenes/ras_file.png" 1778604460.48298 10818 40dd4f0ca25d388d924104d11953ee82 ""
   "imagenes/tree-dambreak.png" 1778604460.48298 31867 acda1c4754888bf57711d05d86031f46 ""
   "incompressibleFluid/incompressibleFluid.tex" 1788925052.04747 505 32b94a6717d04d4c7a1ffee224717179 ""
-  "main.aux" 1791249895.39947 2643 699f2c173c909c25baa6ed75974b697c "pdflatex"
+  "main.aux" 1791748650.18751 2854 27de5dd7688e6c40f6ce43e948f7b0e6 "pdflatex"
   "main.tex" 1791249894.40899 317 72eacbe0e871cb42f73af4d0e22b2dc7 ""
   "mesh/mesh.tex" 1791249403.07375 7839 13084b260de00c47e0c9708806c62535 ""
   "mesh/puntos.png" 1791229961.3994 8596 d134b50deb91eed1f9bc714eae693bcf ""
-  "solvers/solvers.tex" 1791249799.01569 1995 9ee235141bade1de04655c8f6c3ff14d ""
+  "solvers/solvers.tex" 1791249881.24076 7406 a4951e0c032d74ae945ea24c8495d131 ""
   (generated)
   "main.aux"
   "main.log"
